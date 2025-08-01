@@ -2,7 +2,10 @@ import type {AppModule} from '../AppModule.js';
 import {ModuleContext} from '../ModuleContext.js';
 import {BrowserWindow} from 'electron';
 import type {AppInitConfig} from '../AppInitConfig.js';
-
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+const iconPath = join(__dirname, '../../../buildResources/asymptote-logo.ico');
 class WindowManager implements AppModule {
   readonly #preload: {path: string};
   readonly #renderer: {path: string} | URL;
@@ -23,6 +26,7 @@ class WindowManager implements AppModule {
 
   async createWindow(): Promise<BrowserWindow> {
     const browserWindow = new BrowserWindow({
+      icon: iconPath,
       show: false, // Use the 'ready-to-show' event to show the instantiated BrowserWindow.
       webPreferences: {
         nodeIntegration: false,

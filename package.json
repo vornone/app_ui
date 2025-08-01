@@ -37,6 +37,8 @@
     "playwright": "^1.54.1"
   },
   "dependencies": {
-    "@app/main": "*"
+    "@ant-design/pro-components": "^2.8.10",
+    "@app/main": "*",
+    "antd": "^5.26.7"
   }
 }
