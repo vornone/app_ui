@@ -1,141 +1,180 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Layout, Menu, theme, Button, Flex, type MenuProps } from "antd";
 import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-} from '@ant-design/icons';
-import { Layout, Menu, theme, Button } from 'antd';
+  UserOutlined,
+  VideoCameraOutlined,
+  UploadOutlined,
+  SettingOutlined,
+  LogoutOutlined,
+  HomeOutlined,
+  VerticalLeftOutlined,
+  VerticalRightOutlined,
+} from "@ant-design/icons";
+import { Outlet, Link, useLocation } from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const siderWidth = 200;
 
-// const menuItems = [
-//   {
-//     key: '1',
-//     icon: <UserOutlined />,
-//     label: 'Nav 1',
-//   },
-//   {
-//     key: '2',
-//     icon: <VideoCameraOutlined />,
-//     label: 'Nav 2',
-//   },
-//   {
-//     key: '3',
-//     icon: <UploadOutlined />,
-//     label: 'Nav 3',
-//   },
-//   {
-//     key: '4',
-//     icon: <UserOutlined />,
-//     label: 'Nav 4',
-//   },
-//   {
-//     type: 'divider',
-//   },
-//   {
-//     key: 'settings',
-//     icon: <SettingOutlined />,
-//     label: 'Settings',
-//   },
-//   {
-//     key: 'logout',
-//     icon: <LogoutOutlined />,
-//     label: 'Logout',
-//   },
-// ];
+// Menu items
+const items: MenuProps["items"] = [
+  {
+    key: "/dashboard", // Use path as key
+    icon: <HomeOutlined />,
+    label: <Link to="/dashboard">Home</Link>,
+  },
+  {
+    key: "/nav2",
+    icon: <VideoCameraOutlined />,
+    label: <Link to="/">Nav 2</Link>,
+  },
+  {
+    key: "/nav3",
+    icon: <UploadOutlined />,
+    label: <Link to="/">Nav 3</Link>,
+  },
+  {
+    key: "/nav4",
+    icon: <UserOutlined />,
+    label: <Link to="/">Nav 4</Link>,
+  },
+  {
+    type: "divider",
+  },
+  {
+    key: "/setting",
+    icon: <SettingOutlined />,
+    label: <Link to="/setting">Settings</Link>,
+  },
+  {
+    key: "logout",
+    icon: <LogoutOutlined />,
+    label: "Logout",
+  },
+];
 
 const LayoutComponent: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedKey, setSelectedKey] = useState('1');
+  const location = useLocation();
+  const [selectedKey, setSelectedKey] = useState('/dashboard');
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  // Update selectedKey whenever route changes
+useEffect(() => {
+  const basePath = "/" + location.pathname.split("/")[1];
+  setSelectedKey(basePath);
+}, [location.pathname]);
+
+  const handleClick = (e: any) => {
+    if (e.key === "logout") {
+      console.log("Logging out...");
+      return;
+    }
+    setSelectedKey(e.key); // For manual clicks, though useEffect also updates it
+  };
+
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        trigger={null}
-        theme="light"
-        width={siderWidth}
-        collapsible
-        collapsedWidth={75}
-        collapsed={collapsed}
-        onCollapse={setCollapsed}
-        style={{
-          overflow: 'auto',
-          height: '100dvh',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          borderRight: '1px solid #f0f0f0',
-        }}
-      >
-        <div
-          style={{
-            height: 64,
-            margin: 16,
-            background: 'rgba(255, 255, 255, 0.2)',
-            borderRadius: 8,
-          }}
-        />
-        <Menu
+    <Flex
+      style={{
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100dvh",
+        width: "100%",
+        margin: 0,
+        padding: 0,
+        boxSizing: "border-box",
+      }}
+    >
+      <Layout style={{ height: "100%", width: "100%" }}>
+        <Sider
+          trigger={null}
           theme="light"
-          mode="inline"
-          selectedKeys={[selectedKey]}
-          onClick={(e) => setSelectedKey(e.key)}
-        />
-      </Sider>
-
-      <Layout
-        style={{
-          marginLeft: collapsed ? 80 : siderWidth,
-          transition: 'margin-left 0.2s',
-        }}
-      >
-        <Header
+          width={siderWidth}
+          collapsible
+          collapsedWidth={75}
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
           style={{
-            padding: '0 16px',
-            background: colorBgContainer,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-            }}
-          />
-        </Header>
-
-        <Content
-          style={{
-            margin: '24px 16px 0',
-            overflow: 'initial',
+            overflow: "auto",
+            height: "100%",
+            position: "fixed",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            borderRight: "1px solid #5f5f5fff",
           }}
         >
           <div
             style={{
-              padding: 24,
-              minHeight: 360,
+              height: 64,
+              margin: 16,
+              background: "rgba(255, 255, 255, 0.2)",
+              borderRadius: 8,
+            }}
+          />
+          <Menu
+            theme="light" // TODO: textprimarycolor
+            mode="inline"
+            selectedKeys={[selectedKey]}
+            onClick={handleClick}
+            items={items}
+
+          />
+        </Sider>
+
+        <Layout
+          style={{
+            marginLeft: collapsed ? 80 : siderWidth,
+            transition: "margin-left 0.2s",
+          }}
+        >
+          <Header
+            style={{
+              padding: "0 16px",
               background: colorBgContainer,
-              borderRadius: borderRadiusLG,
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            Content for {selectedKey}
-          </div>
-        </Content>
+            <Button
+              type="text"
+              icon={collapsed ? <VerticalLeftOutlined /> : <VerticalRightOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: "16px",
+              }}
+            />
+          </Header>
 
-        <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
+          <Content
+            style={{
+              margin: "24px 16px 0",
+              overflow: "initial",
+            }}
+          >
+            <div
+              style={{
+                padding: 24,
+                minHeight: 360,
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+              }}
+            >
+              <Outlet />
+            </div>
+          </Content>
+
+          <Footer style={{ textAlign: "center" }}>
+            Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          </Footer>
+        </Layout>
       </Layout>
-    </Layout>
+    </Flex>
   );
 };
 

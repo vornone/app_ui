@@ -29,6 +29,7 @@
   "devDependencies": {
     "@npmcli/map-workspaces": "4.0.2",
     "@playwright/test": "1.54.1",
+    "@tanstack/eslint-plugin-query": "^5.83.1",
     "@types/node": "24.1.0",
     "create-vite": "7.0.3",
     "electron": "37.2.5",
@@ -39,6 +40,9 @@
   "dependencies": {
     "@ant-design/pro-components": "^2.8.10",
     "@app/main": "*",
-    "antd": "^5.26.7"
+    "@tanstack/react-query": "^5.84.1",
+    "antd": "^5.26.7",
+    "axios": "^1.11.0",
+    "react-router-dom": "^7.7.1"
   }
 }
