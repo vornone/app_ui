@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiService } from '../api/apiService';
 
 interface LoginDTO {
-  email: string;
+  name: string;
   password: string;
 }
 

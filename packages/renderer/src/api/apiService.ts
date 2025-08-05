@@ -12,7 +12,7 @@ export const apiService = {
   // Get CSRF cookie from the correct endpoint
   getCsrfCookie: () => csrfClient.get('/sanctum/csrf-cookie'),
 
-  login: async (credentials: { email: string; password: string }) => {
+  login: async (credentials: { name: string; password: string }) => {
     // Get CSRF cookie first
     await csrfClient.get('/sanctum/csrf-cookie');
     return apiClient.post('/login', credentials);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Layout, Menu, theme, Button, Flex, type MenuProps } from "antd";
+import { Layout, Menu, theme, Button, Flex, type MenuProps, message } from "antd";
 import {
   UserOutlined,
   VideoCameraOutlined,
@@ -11,7 +11,8 @@ import {
   VerticalLeftOutlined,
   VerticalRightOutlined,
 } from "@ant-design/icons";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -48,7 +49,7 @@ const items: MenuProps["items"] = [
     label: <Link to="/setting">Settings</Link>,
   },
   {
-    key: "logout",
+    key: "/logout",
     icon: <LogoutOutlined />,
     label: "Logout",
   },
@@ -57,8 +58,11 @@ const items: MenuProps["items"] = [
 const LayoutComponent: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
-  const [selectedKey, setSelectedKey] = useState('/dashboard');
-
+  const [selectedKey, setSelectedKey] = useState(location.pathname);
+  const {useLogout} = useAuth();
+  const logoutMutation = useLogout();
+  const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -76,7 +80,23 @@ useEffect(() => {
     }
     setSelectedKey(e.key); // For manual clicks, though useEffect also updates it
   };
-
+  const onLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        messageApi.open({
+          type: "success",
+          content: "Logout successful!",
+        });
+        navigate("/login", { replace: true });
+      },
+      onError: (error: any) => {
+        messageApi.open({
+          type: "error",
+          content: error.message || "Logout failed",
+        });
+      },
+    });
+  };
   return (
     <Flex
       style={{
@@ -121,7 +141,14 @@ useEffect(() => {
             theme="light" // TODO: textprimarycolor
             mode="inline"
             selectedKeys={[selectedKey]}
-            onClick={handleClick}
+            onClick={(e: any) => {
+  if (e.key === "/logout") {
+    onLogout();
+  } else {
+    handleClick(e);
+  }
+}}
+
             items={items}
 
           />

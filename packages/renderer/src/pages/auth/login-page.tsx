@@ -16,15 +16,16 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
-  const { useLogin } = useAuth();
+  const { useLogin, useLogout } = useAuth();
   const loginMutation = useLogin();
+  const logoutMutation = useLogout();
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
 
   const onFinish = (values: any) => {
-    // Map username to email for API
+    // Map username to name for API
     loginMutation.mutate(
-      { email: values.email, password: values.password },
+      { name: values.name, password: values.password },
       {
         onSuccess: () => {
           messageApi.open({
@@ -44,6 +45,7 @@ const LoginPage: React.FC = () => {
       }
     );
   };
+
 
   return (
     <Flex
@@ -121,10 +123,10 @@ const LoginPage: React.FC = () => {
             }}
           >
             <Form.Item
-              name="email"
-              rules={[{ required: true, message: "Please input your email!" }]}
+              name="name"
+              rules={[{ required: true, message: "Please input your name!" }]}
             >
-              <Input prefix={<MailOutlined />} placeholder="email" />
+              <Input prefix={<UserOutlined />} placeholder="name" />
             </Form.Item>
 
             <Form.Item
