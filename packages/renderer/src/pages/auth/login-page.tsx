@@ -32,7 +32,7 @@ const LoginPage: React.FC = () => {
             type: "success",
             content: "Login successful!",
           });
-          navigate("/", { replace: true });
+          navigate("/dashboard", { replace: true });
 
           // TODO: redirect or update UI here
         },

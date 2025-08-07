@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Layout, Menu, theme, Button, Flex, type MenuProps, message } from "antd";
+import {
+  Layout,
+  Menu,
+  theme,
+  Button,
+  Flex,
+  type MenuProps,
+  message,
+  Dropdown,
+} from "antd";
 import {
   UserOutlined,
   VideoCameraOutlined,
@@ -13,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import MenuItem from "antd/es/menu/MenuItem";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -40,38 +50,23 @@ const items: MenuProps["items"] = [
     icon: <UserOutlined />,
     label: <Link to="/">Nav 4</Link>,
   },
-  {
-    type: "divider",
-  },
-  {
-    key: "/setting",
-    icon: <SettingOutlined />,
-    label: <Link to="/setting">Settings</Link>,
-  },
-  {
-    key: "/logout",
-    icon: <LogoutOutlined />,
-    label: "Logout",
-  },
+
 ];
 
 const LayoutComponent: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
-  const [selectedKey, setSelectedKey] = useState(location.pathname);
-  const {useLogout} = useAuth();
+  const [selectedKey, setSelectedKey] = useState(location.pathname); // Default selected key
+  const { useLogout } = useAuth();
   const logoutMutation = useLogout();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
 
   // Update selectedKey whenever route changes
-useEffect(() => {
-  const basePath = "/" + location.pathname.split("/")[1];
-  setSelectedKey(basePath);
-}, [location.pathname]);
+  useEffect(() => {
+    const basePath = "/" + location.pathname.split("/")[1];
+    setSelectedKey(basePath);
+  }, [location.pathname]);
 
   const handleClick = (e: any) => {
     if (e.key === "logout") {
@@ -113,20 +108,22 @@ useEffect(() => {
       <Layout style={{ height: "100%", width: "100%" }}>
         <Sider
           trigger={null}
-          theme="light"
           width={siderWidth}
           collapsible
           collapsedWidth={75}
-          collapsed={collapsed}
+          collapsed={true}
           onCollapse={setCollapsed}
           style={{
             overflow: "auto",
             height: "100%",
             position: "fixed",
+            padding: 0,
             left: 0,
             top: 0,
             bottom: 0,
-            borderRight: "1px solid #5f5f5fff",
+            borderRight: "1px solid #c4423d",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <div
@@ -138,44 +135,102 @@ useEffect(() => {
             }}
           />
           <Menu
-            theme="light" // TODO: textprimarycolor
-            mode="inline"
-            selectedKeys={[selectedKey]}
-            onClick={(e: any) => {
-  if (e.key === "/logout") {
-    onLogout();
-  } else {
-    handleClick(e);
-  }
-}}
+          defaultSelectedKeys={[selectedKey]}
+  mode="inline"
+  selectedKeys={[selectedKey]} // Use controlled selectedKey
+  onClick={(e: any) => {
+    if (e.key === "/logout") {
+      onLogout();
+    } else {
+      setSelectedKey(e.key);
+    }
+  }}
+  items={[
+    ...items,
+    {
+      key: "/setting", // Also add this so it highlights when accessed from Dropdown
+      icon: <SettingOutlined />,
+      label: <Link to="/setting">Settings</Link>,
+    },
+  ]}
+/>
+          <div
+            style={{
+              position: "absolute",
+              bottom: 20,
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Dropdown
+  menu={{
+    selectedKeys: [selectedKey],
+    items: [
+      {
+        key: "/profile",
+        icon: <UserOutlined />,
+        label: <Link style={{ color: "#ffffff" }} to="/profile">Profile</Link>,
+      },
+      {
+        key: "/setting",
+        icon: <SettingOutlined />,
+        label: <Link style={{ color: "#ffffff" }} to="/setting">Settings</Link>,
+      },
+      {
+        type: "divider",
+      },
+      {
+        key: "/logout",
+        icon: <LogoutOutlined />,
+        label: "Logout",
+        danger: true,
+      },
+    ],
+    onClick: (e: any) => {
+      if (e.key === "/logout") {
+        onLogout();
+      } else {
+        setSelectedKey(e.key);
+        navigate(e.key);
+      }
+    },
+  }}
+  placement="top"
+>
+  <Button
+    type="text"
+    icon={<UserOutlined />}
+    style={{ fontSize: "16px", width: "100%", margin: 5 }}
+  />
+</Dropdown>
 
-            items={items}
-
-          />
+          </div>
         </Sider>
 
         <Layout
           style={{
-            marginLeft: collapsed ? 80 : siderWidth,
+            marginLeft: 80,
             transition: "margin-left 0.2s",
           }}
         >
           <Header
             style={{
               padding: "0 16px",
-              background: colorBgContainer,
               display: "flex",
               alignItems: "center",
             }}
           >
-            <Button
+            {/* <Button
               type="text"
-              icon={collapsed ? <VerticalLeftOutlined /> : <VerticalRightOutlined />}
+              icon={
+                collapsed ? <VerticalLeftOutlined /> : <VerticalRightOutlined />
+              }
               onClick={() => setCollapsed(!collapsed)}
               style={{
                 fontSize: "16px",
               }}
-            />
+            /> */}
           </Header>
 
           <Content
@@ -188,8 +243,6 @@ useEffect(() => {
               style={{
                 padding: 24,
                 minHeight: 360,
-                background: colorBgContainer,
-                borderRadius: borderRadiusLG,
               }}
             >
               <Outlet />
