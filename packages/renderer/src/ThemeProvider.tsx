@@ -34,7 +34,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const getThemeConfig = () => {
     const baseConfig = {
       token: {
-        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+        fontFamily: 'Urbanist, sans-serif',
       },
     };
 
@@ -50,6 +50,8 @@ if (themeMode === 'dark') {
       colorPrimary: "#c4423d",
       colorInfo: "#c4423d",
       colorBgBase: "#191a1b",
+      colorBgContainer: "#21252cff",
+      fontFamily: "'poppins', sans-serif",
     },
     components: {
       Menu: {
@@ -78,6 +80,7 @@ if (themeMode === 'dark') {
         siderBg: "rgba(33, 37, 44, 1)",
         siderBorderColor: "rgba(255, 255, 255, 0.1)",
         headerBg: "rgba(33, 37, 44, 1)",
+        contentBg: "rgba(33, 37, 44, 1)",
       }
     }
   };

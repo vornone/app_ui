@@ -3,7 +3,7 @@ import LoginPage from "./pages/auth/login-page";
 import ProtectedRoute from "./components/protected-route";
 import LayoutComponent from "./layout/layout";
 import DashboardPage from "./pages/dashboard";
-import SettingPage from "./pages/auth/setting-page";
+import SettingPage from "./pages/user/setting-page";
 // Remove the custom RouteObject interface - React Router provides its own
 
 export const routes = createBrowserRouter([

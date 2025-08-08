@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { BorderBottomOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import {
   Layout,
   Menu,
@@ -9,6 +9,7 @@ import {
   type MenuProps,
   message,
   Dropdown,
+  Typography,
 } from "antd";
 import {
   UserOutlined,
@@ -22,8 +23,7 @@ import {
 } from "@ant-design/icons";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import MenuItem from "antd/es/menu/MenuItem";
-
+import asymptoteLogo from "../../src/assets/logos/asymptote-logo-white.svg";
 const { Header, Content, Footer, Sider } = Layout;
 
 const siderWidth = 200;
@@ -61,7 +61,7 @@ const LayoutComponent: React.FC = () => {
   const logoutMutation = useLogout();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
-
+  const themes = theme.useToken();
   // Update selectedKey whenever route changes
   useEffect(() => {
     const basePath = "/" + location.pathname.split("/")[1];
@@ -128,12 +128,15 @@ const LayoutComponent: React.FC = () => {
         >
           <div
             style={{
+              display: "flex",
+              justifyContent: "center",
               height: 64,
               margin: 16,
-              background: "rgba(255, 255, 255, 0.2)",
               borderRadius: 8,
             }}
-          />
+          >
+            <img src={asymptoteLogo} width="50" alt="" />
+          </div>
           <Menu
           defaultSelectedKeys={[selectedKey]}
   mode="inline"
@@ -210,17 +213,22 @@ const LayoutComponent: React.FC = () => {
 
         <Layout
           style={{
-            marginLeft: 80,
+            marginLeft: 76,
             transition: "margin-left 0.2s",
           }}
         >
           <Header
             style={{
-              padding: "0 16px",
+              padding: 24,
               display: "flex",
               alignItems: "center",
+              borderBottom: "1px solid #c4423d",
+              justifyContent: "space-between",
+              flexDirection: "row-reverse",
+
             }}
           >
+            <Typography.Text level={1}>v1.00</Typography.Text>
             {/* <Button
               type="text"
               icon={
@@ -235,13 +243,18 @@ const LayoutComponent: React.FC = () => {
 
           <Content
             style={{
-              margin: "24px 16px 0",
-              overflow: "initial",
-            }}
+  overflow: "initial",
+  background: 'linear-gradient(90deg, #21252cff, #c4413d1e)', // <-- here
+  margin: 15,
+  borderRadius: 8,
+  padding: 24,
+  height: '100%'
+}}
+
           >
+            <h1 style={{ textAlign: "left",textTransform: "capitalize" }}>{location.pathname.split("/")[1]}.</h1>
             <div
               style={{
-                padding: 24,
                 minHeight: 360,
               }}
             >
@@ -249,9 +262,9 @@ const LayoutComponent: React.FC = () => {
             </div>
           </Content>
 
-          <Footer style={{ textAlign: "center" }}>
+          {/* <Footer style={{ textAlign: "center" }}>
             Ant Design ©{new Date().getFullYear()} Created by Ant UED
-          </Footer>
+          </Footer> */}
         </Layout>
       </Layout>
     </Flex>
