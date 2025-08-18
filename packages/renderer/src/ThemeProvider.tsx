@@ -51,7 +51,7 @@ if (themeMode === 'dark') {
       colorInfo: "#c4423d",
       colorBgBase: "#191a1b",
       colorBgContainer: "#21252cff",
-      fontFamily: "'poppins', sans-serif",
+      fontFamily: "'jetbrains mono', sans-serif",
     },
     components: {
       Menu: {

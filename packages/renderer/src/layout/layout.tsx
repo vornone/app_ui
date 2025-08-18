@@ -18,8 +18,7 @@ import {
   SettingOutlined,
   LogoutOutlined,
   HomeOutlined,
-  VerticalLeftOutlined,
-  VerticalRightOutlined,
+  ProductOutlined
 } from "@ant-design/icons";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
@@ -34,6 +33,11 @@ const items: MenuProps["items"] = [
     key: "/dashboard", // Use path as key
     icon: <HomeOutlined />,
     label: <Link to="/dashboard">Home</Link>,
+  },
+  {
+    key: "/product",
+    icon: <ProductOutlined />,
+    label: <Link to="/product">Product</Link>,
   },
   {
     key: "/nav2",
