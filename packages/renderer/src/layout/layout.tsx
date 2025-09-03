@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { BorderBottomOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import {
+  LeftOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
 import {
   Layout,
   Menu,
@@ -18,11 +21,12 @@ import {
   SettingOutlined,
   LogoutOutlined,
   HomeOutlined,
-  ProductOutlined
+  ProductOutlined,
 } from "@ant-design/icons";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import asymptoteLogo from "../../src/assets/logos/asymptote-logo-white.svg";
+import NavigatePageButton from "../components/navigate-page-button";
 const { Header, Content, Footer, Sider } = Layout;
 
 const siderWidth = 200;
@@ -54,7 +58,6 @@ const items: MenuProps["items"] = [
     icon: <UserOutlined />,
     label: <Link to="/">Nav 4</Link>,
   },
-
 ];
 
 const LayoutComponent: React.FC = () => {
@@ -142,25 +145,25 @@ const LayoutComponent: React.FC = () => {
             <img src={asymptoteLogo} width="50" alt="" />
           </div>
           <Menu
-          defaultSelectedKeys={[selectedKey]}
-  mode="inline"
-  selectedKeys={[selectedKey]} // Use controlled selectedKey
-  onClick={(e: any) => {
-    if (e.key === "/logout") {
-      onLogout();
-    } else {
-      setSelectedKey(e.key);
-    }
-  }}
-  items={[
-    ...items,
-    {
-      key: "/setting", // Also add this so it highlights when accessed from Dropdown
-      icon: <SettingOutlined />,
-      label: <Link to="/setting">Settings</Link>,
-    },
-  ]}
-/>
+            defaultSelectedKeys={[selectedKey]}
+            mode="inline"
+            selectedKeys={[selectedKey]} // Use controlled selectedKey
+            onClick={(e: any) => {
+              if (e.key === "/logout") {
+                onLogout();
+              } else {
+                setSelectedKey(e.key);
+              }
+            }}
+            items={[
+              ...items,
+              {
+                key: "/setting", // Also add this so it highlights when accessed from Dropdown
+                icon: <SettingOutlined />,
+                label: <Link to="/setting">Settings</Link>,
+              },
+            ]}
+          />
           <div
             style={{
               position: "absolute",
@@ -171,47 +174,54 @@ const LayoutComponent: React.FC = () => {
             }}
           >
             <Dropdown
-  menu={{
-    selectedKeys: [selectedKey],
-    items: [
-      {
-        key: "/profile",
-        icon: <UserOutlined />,
-        label: <Link style={{ color: "#ffffff" }} to="/profile">Profile</Link>,
-      },
-      {
-        key: "/setting",
-        icon: <SettingOutlined />,
-        label: <Link style={{ color: "#ffffff" }} to="/setting">Settings</Link>,
-      },
-      {
-        type: "divider",
-      },
-      {
-        key: "/logout",
-        icon: <LogoutOutlined />,
-        label: "Logout",
-        danger: true,
-      },
-    ],
-    onClick: (e: any) => {
-      if (e.key === "/logout") {
-        onLogout();
-      } else {
-        setSelectedKey(e.key);
-        navigate(e.key);
-      }
-    },
-  }}
-  placement="top"
->
-  <Button
-    type="text"
-    icon={<UserOutlined />}
-    style={{ fontSize: "16px", width: "100%", margin: 5 }}
-  />
-</Dropdown>
-
+              menu={{
+                selectedKeys: [selectedKey],
+                items: [
+                  {
+                    key: "/profile",
+                    icon: <UserOutlined />,
+                    label: (
+                      <Link style={{ color: "#ffffff" }} to="/profile">
+                        Profile
+                      </Link>
+                    ),
+                  },
+                  {
+                    key: "/setting",
+                    icon: <SettingOutlined />,
+                    label: (
+                      <Link style={{ color: "#ffffff" }} to="/setting">
+                        Settings
+                      </Link>
+                    ),
+                  },
+                  {
+                    type: "divider",
+                  },
+                  {
+                    key: "/logout",
+                    icon: <LogoutOutlined />,
+                    label: "Logout",
+                    danger: true,
+                  },
+                ],
+                onClick: (e: any) => {
+                  if (e.key === "/logout") {
+                    onLogout();
+                  } else {
+                    setSelectedKey(e.key);
+                    navigate(e.key);
+                  }
+                },
+              }}
+              placement="top"
+            >
+              <Button
+                type="text"
+                icon={<UserOutlined />}
+                style={{ fontSize: "16px", width: "100%", margin: 5 }}
+              />
+            </Dropdown>
           </div>
         </Sider>
 
@@ -229,10 +239,13 @@ const LayoutComponent: React.FC = () => {
               borderBottom: "1px solid #c4423d",
               justifyContent: "space-between",
               flexDirection: "row-reverse",
-
             }}
           >
-            <Typography.Text level={1}>v1.00</Typography.Text>
+            <Flex gap="small" align="center">
+            <NavigatePageButton step={-1} Icon={<LeftOutlined />} />
+            <NavigatePageButton step={1} Icon={<RightOutlined />} />
+            </Flex>
+            <Typography.Text>v1.00</Typography.Text>
             {/* <Button
               type="text"
               icon={
@@ -247,16 +260,17 @@ const LayoutComponent: React.FC = () => {
 
           <Content
             style={{
-  overflow: "initial",
-  background: 'linear-gradient(90deg, #21252cff, #c4413d1e)', // <-- here
-  margin: 15,
-  borderRadius: 8,
-  padding: 24,
-  height: '100%'
-}}
-
+              overflow: "auto",
+              background: "linear-gradient(90deg, #21252cff, #c4413d1e)", // <-- here
+              // margin: 15,
+              borderRadius: 8,
+              padding: 24,
+              height: "100%",
+            }}
           >
-            <h1 style={{ textAlign: "left",textTransform: "capitalize" }}>{location.pathname.split("/")[1]}.</h1>
+            <h1 style={{ textAlign: "left", textTransform: "capitalize", position: "sticky" }}>
+              {location.pathname.split("/")[1]}.
+            </h1>
             <div
               style={{
                 minHeight: 360,

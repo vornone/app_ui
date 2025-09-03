@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
   const onFinish = (values: any) => {
     // Map username to name for API
     loginMutation.mutate(
-      { name: values.name, password: values.password },
+      { email: values.email, password: values.password },
       {
         onSuccess: () => {
           messageApi.open({
@@ -123,10 +123,10 @@ const LoginPage: React.FC = () => {
             }}
           >
             <Form.Item
-              name="name"
-              rules={[{ required: true, message: "Please input your name!" }]}
+              name="email"
+              rules={[{ required: true, message: "Please input your email!" }]}
             >
-              <Input prefix={<UserOutlined />} placeholder="name" />
+              <Input prefix={<MailOutlined />} placeholder="email" />
             </Form.Item>
 
             <Form.Item

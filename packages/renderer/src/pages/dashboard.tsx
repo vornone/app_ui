@@ -16,6 +16,7 @@ const data = [
 ];
 
 const DashboardPage = () => {
+
   return (
     <Card title="Line Chart" style={{ width: '100%' }}>
       <div style={{ width: "100%", height: 300 }}>
